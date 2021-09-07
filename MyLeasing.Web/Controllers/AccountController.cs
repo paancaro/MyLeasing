@@ -42,7 +42,7 @@ namespace MyLeasing.Web.Controllers
                 }
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to login.");
+            ModelState.AddModelError(string.Empty, "Error de Ususario o Contraseña.");
             return View(model);
         }
 
