@@ -31,8 +31,8 @@ namespace MyLeasing.Web.Controllers
                 );
         }
 
-        // GET: Owners/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Owners/Details
+        public async Task<IActionResult> Details(int? id) // Interrogacion significa nulo
         {
             if (id == null)
             {
@@ -40,7 +40,13 @@ namespace MyLeasing.Web.Controllers
             }
 
             var owner = await _dataContext.Owners
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(o => o.User)             //Incluye los componentes del objeto owner
+                .Include(o => o.Properties)       // Como si fueran joins de tablas 
+                .ThenInclude(p => p.PropertyImages)
+                .Include(o => o.Contracts)
+                .ThenInclude(c => c.Lessee)
+                .ThenInclude(l => l.User)
+                .FirstOrDefaultAsync(o => o.Id == id);
             if (owner == null)
             {
                 return NotFound();
